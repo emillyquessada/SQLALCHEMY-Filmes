@@ -53,7 +53,19 @@ def cadastrar_filme():
             session.rollback()
             print(f"Ocorreu um erro {erro}")
 
-   
+def listar_filme():
+
+    with Session() as session:
+        try:
+            buscar_filme = session.query(Filme).all()
+            for filme in buscar_filme:
+                print(f"Título: {filme.titulo} | Gênero: {filme.genero} | Ano: {filme.ano_lancamento} | Nota: {filme.nota}")
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro {erro}")
+listar_filme()
+
+
 #Criar as funções listar, atualizar e deletar
 cadastrar_filme()
 
