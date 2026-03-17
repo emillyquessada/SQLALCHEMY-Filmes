@@ -32,7 +32,7 @@ Session = sessionmaker(bind=engine)
 # Criar funções CRUD
 def cadastrar_filme():
     print(f"\n--- CADASTRAR FILMES ---")
-    nome_filme = input("Digite o título do filme: ")
+    titulo = input("Digite o título do filme: ")
     genero = input("Digite o gênero do filme: ")
     ano = int(input("Digite o ano de lançamento do filme: "))
     nota = float(input("Digite a nota do filme: "))
@@ -40,9 +40,9 @@ def cadastrar_filme():
     with Session() as session:
         try:
             #Verificar o titulo duplicado
-            buscar_filme = session.query(Filme).filter_by(titulo=nome_filme, ano_lancamento=ano).first()
+            buscar_filme = session.query(Filme).filter_by(titulo=titulo, ano_lancamento=ano).first()
             if buscar_filme == None:
-                novo_filme = Filme(nome_filme, genero, ano, nota)
+                novo_filme = Filme(titulo, genero, ano, nota)
                 session.add(novo_filme)
                 session.commit()
                 print("Filme cadastrado com sucesso")
@@ -52,6 +52,8 @@ def cadastrar_filme():
         except Exception as erro:
             session.rollback()
             print(f"Ocorreu um erro {erro}")
+
+cadastrar_filme()
 
 def listar_filme():
 
@@ -88,9 +90,23 @@ def atualizar_filme():
 
 atualizar_filme()
 
+def deletar_filmes():
+    id_filme = int(input("\n Digite o ID do filme que deseja deletar:"))
+    with Session() as session:
+        try:
+            deletar = session.query(Filme).filter_by(id=id_filme).first()
+            if deletar:
+                session.delete(deletar)
+                session.commit()
+                print("Filme deletado com sucesso!")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro: {erro}")
+
+deletar_filmes()
 
 
-#Criar as funções listar, atualizar e deletar
-cadastrar_filme()
+
 
 
