@@ -65,6 +65,30 @@ def listar_filme():
             print(f"Ocorreu um erro {erro}")
 listar_filme()
 
+def atualizar_filme():
+    id_filme = int(input("\n Digite o ID do filme que deseja atualizar: "))    
+    with Session() as session:
+        try:
+            filme = session.query(Filme).filter_by(id=id_filme).first()
+            if filme:
+                filme.titulo = input(f"Novo título: ")
+                filme.genero = input(f"Novo gênero: ")
+                filme.ano_lancamento = int(input(f"Novo ano: "))
+                filme.nota = float(input(f"Nova nota: "))
+
+                session.commit()
+                print("Filme atualizado com sucesso!")
+                print(f"Título: {filme.titulo} | Gênero: {filme.genero} | Ano: {filme.ano_lancamento} | Nota: {filme.nota}")
+            else:
+                print("Filme não encontrado.")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Ocorreu um erro: {erro}")
+
+atualizar_filme()
+
+
 
 #Criar as funções listar, atualizar e deletar
 cadastrar_filme()
